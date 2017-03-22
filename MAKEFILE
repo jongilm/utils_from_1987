@@ -1,0 +1,278 @@
+#зддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд©
+#Ё          ************ Utilities ***********               Ё
+#Ё                                                           Ё
+#Ё Copyright (c) Computer Lab Jhb cc.  All rights reserved.  Ё
+#цддддддддддддддддддддддддддддддддддддддддддддддддддддддддддд╢
+#Ё                                                           Ё
+#Ё        File : MakeFile                                    Ё
+#Ё      Author : Jonathan Gilmore                            Ё
+#Ё        Date : 19 August   1990                            Ё
+#Ё Description : NMake file for the all utilities.           Ё
+#Ё                                                           Ё
+#юддддддддддддддддддддддддддддддддддддддддддддддддддддддддддды
+
+SRCDIR=.
+OBJDIR=objects
+LIBDIR=\tools
+DODLIB=\doddle\lib
+BINDIR=bin
+
+{$(SRCDIR)}.asm{$(OBJDIR)}.obj:
+   masm -t -z $**,$@;
+
+{$(SRCDIR)}.c{$(OBJDIR)}.obj :
+   cl /nologo /AL /Ox /c /W3 /Fo$@ $**
+
+{$(OBJDIR)}.obj{$(BINDIR)}.sys :
+   link /nologo $**,$*.exe;
+   exe2bin $*.exe $@
+   del $*.exe
+
+{$(OBJDIR)}.obj{$(BINDIR)}.com :
+   link /nologo /tiny $**,$@;
+
+{$(OBJDIR)}.obj{$(BINDIR)}.exe :
+#   link /nologo $**,$@;
+   cl /nologo /Fe$@ $**
+
+#{$(SRCDIR)}.c{$(BINDIR)}.exe :
+#   cl /nologo /AL /Ox /c /W3 /Fo$@ $**
+#   link /nologo /E /CP:1 $*.obj,,,toolsl.lib commsl.lib doddle.lib;
+
+#{$(SRCDIR)}.c{$(BINDIR)}.exe :
+#   cl /nologo /AL /Ox $** c:\c600\lib\setargv.obj /link /E /CP:1 toolsl.lib commsl.lib doddle.lib
+
+#{$(SRCDIR)}.c{$(BINDIR)}.exe :
+#   cl /nologo /AL /Ox $** /link /E /CP:1 toolsl.lib commsl.lib doddle.lib
+
+#{$(SRCDIR)}.c{$(BINDIR)}.com :
+#   cl /nologo /AT /Ox $*.c /link toolss.lib
+
+#################################################################
+ALL : ASM_MSG ASM C_MSG C
+   @echo $@ Done
+
+ASM_MSG :
+   @echo Building ASM's...
+
+C_MSG :
+   @echo Building C's...
+
+PAS_MSG :
+   @echo Building PAS's...
+
+#здддддддддддддддддддддддддддддддддддддддддддддддддд©
+#ЁASM                                               Ё
+#юдддддддддддддддддддддддддддддддддддддддддддддддддды
+
+ASM : $(BINDIR)\asy.com\
+      $(BINDIR)\asydvr.sys\
+      $(BINDIR)\balls.exe\
+      $(OBJDIR)\c.obj\
+      $(BINDIR)\com_2.com\
+      $(BINDIR)\cursor.com\
+      $(BINDIR)\drive.com\
+      $(BINDIR)\example.com\
+      $(BINDIR)\exe2.exe\
+      $(BINDIR)\nde.com\
+      $(OBJDIR)\c_module.obj\
+      $(BINDIR)\x.com\
+      $(BINDIR)\com.com\
+      $(BINDIR)\exe.exe
+   @echo $@ Done
+
+$(BINDIR)\asy.com       : $(OBJDIR)\asy.obj
+$(BINDIR)\asydvr.sys    : $(OBJDIR)\asydvr.obj
+$(BINDIR)\balls.exe     : $(OBJDIR)\balls.obj
+$(BINDIR)\com.com       : $(OBJDIR)\com.obj
+$(BINDIR)\com_2.com     : $(OBJDIR)\com_2.obj $(OBJDIR)\bios.obj
+$(BINDIR)\cursor.com    : $(OBJDIR)\cursor.obj
+$(BINDIR)\drive.com     : $(OBJDIR)\drive.obj
+$(BINDIR)\example.com   : $(OBJDIR)\example.obj
+$(BINDIR)\exe.exe       : $(OBJDIR)\exe.obj
+$(BINDIR)\exe2.exe      : $(OBJDIR)\exe2.obj $(OBJDIR)\bios.obj
+$(BINDIR)\nde.com       : $(OBJDIR)\nde.obj
+$(BINDIR)\x.com         : $(OBJDIR)\x.obj
+
+#здддддддддддддддддддддддддддддддддддддддддддддддддд©
+#ЁC                                                 Ё
+#юдддддддддддддддддддддддддддддддддддддддддддддддддды
+C   : $(BINDIR)\a.exe\
+      $(BINDIR)\alarm.exe\
+      $(BINDIR)\all.exe\
+      $(BINDIR)\asyutl.exe\
+      $(BINDIR)\bearings.exe\
+      $(BINDIR)\blink.exe\
+      $(BINDIR)\bond.exe\
+      $(BINDIR)\bootsect.exe\
+      $(BINDIR)\btrievex.exe\
+      $(BINDIR)\cflow.exe\
+      $(BINDIR)\change.exe\
+      $(BINDIR)\chchar.exe\
+      $(BINDIR)\cod.exe\
+      $(BINDIR)\cof.exe\
+      $(BINDIR)\compare.exe\
+      $(BINDIR)\config.exe\
+      $(BINDIR)\default.exe\
+      $(BINDIR)\df.exe\
+      $(BINDIR)\dodscr.exe\
+      $(BINDIR)\dodsys.exe\
+      $(BINDIR)\dram.exe\
+      $(BINDIR)\driveok.exe\
+      $(BINDIR)\dump.exe\
+      $(BINDIR)\ef.exe\
+      $(BINDIR)\envsize.exe\
+      $(BINDIR)\equip.exe\
+      $(BINDIR)\fillscr.exe\
+      $(BINDIR)\findnul.exe\
+      $(BINDIR)\font.exe\
+      $(BINDIR)\fparser.exe\
+      $(BINDIR)\getch.exe\
+      $(BINDIR)\hardtype.exe\
+      $(BINDIR)\hexdec.exe\
+      $(BINDIR)\int.exe\
+      $(BINDIR)\intwatch.exe\
+      $(BINDIR)\isramdrv.exe\
+      $(BINDIR)\jensen.exe\
+      $(BINDIR)\jensen1.exe\
+      $(BINDIR)\kbd.exe\
+      $(BINDIR)\kbdrate.exe\
+      $(BINDIR)\mice.exe\
+      $(BINDIR)\mnu.exe\
+      $(BINDIR)\mnu1.exe\
+      $(BINDIR)\mort.exe\
+      $(BINDIR)\move.exe\
+      $(BINDIR)\movebox.exe\
+      $(BINDIR)\niceprn.exe\
+      $(BINDIR)\num2word.exe\
+      $(BINDIR)\objdump.exe\
+      $(BINDIR)\once.exe\
+      $(BINDIR)\pages.exe\
+      $(BINDIR)\patch61.exe\
+      $(BINDIR)\pic.exe\
+      $(BINDIR)\ports.exe\
+      $(BINDIR)\qcom.exe\
+      $(BINDIR)\query.exe\
+      $(BINDIR)\rendir.exe\
+      $(BINDIR)\resetcom.exe\
+      $(BINDIR)\return.exe\
+      $(BINDIR)\save.exe\
+      $(BINDIR)\showint.exe\
+      $(BINDIR)\showkbd.exe\
+      $(BINDIR)\sm.exe\
+      $(BINDIR)\strange.exe\
+      $(BINDIR)\tvm.exe\
+      $(BINDIR)\tvm1.exe\
+      $(BINDIR)\tvm123.exe\
+      $(BINDIR)\tvm2.exe\
+      $(BINDIR)\tvm_try.exe\
+      $(BINDIR)\uparser.exe\
+      $(BINDIR)\vmode.exe\
+      $(BINDIR)\walk.exe \
+      $(BINDIR)\xmas.exe\
+      $(BINDIR)\ziplist.exe
+
+$(BINDIR)\asy.com       : $(OBJDIR)\asy.obj
+$(BINDIR)\a.exe         : $(OBJDIR)\a.obj
+$(BINDIR)\alarm.exe     : $(OBJDIR)\alarm.obj
+$(BINDIR)\all.exe       : $(OBJDIR)\all.obj
+$(BINDIR)\asyutl.exe    : $(OBJDIR)\asyutl.obj
+$(BINDIR)\bearings.exe  : $(OBJDIR)\bearings.obj $(LIBDIR)\toolsl.lib
+$(BINDIR)\blink.exe     : $(OBJDIR)\blink.obj
+$(BINDIR)\bond.exe      : $(OBJDIR)\bond.obj
+$(BINDIR)\bootsect.exe  : $(OBJDIR)\bootsect.obj
+$(BINDIR)\btrievex.exe  : $(OBJDIR)\btrievex.obj
+$(BINDIR)\cflow.exe     : $(OBJDIR)\cflow.obj
+$(BINDIR)\change.exe    : $(OBJDIR)\change.obj
+$(BINDIR)\chchar.exe    : $(OBJDIR)\chchar.obj
+$(BINDIR)\cod.exe       : $(OBJDIR)\cod.obj $(OBJDIR)\codf.obj $(DODLIB)\doddle.lib
+   cl /Fe$@ $** doddle.lib /link /ST:10000 /E
+$(BINDIR)\cof.exe       : $(OBJDIR)\cof.obj      $(LIBDIR)\toolsl.lib
+$(BINDIR)\compare.exe   : $(OBJDIR)\compare.obj  $(DODLIB)\doddle.lib
+$(BINDIR)\config.exe    : $(OBJDIR)\config.obj
+$(BINDIR)\default.exe   : $(OBJDIR)\default.obj
+$(BINDIR)\df.exe        : $(OBJDIR)\df.obj       $(LIBDIR)\toolsl.lib
+$(BINDIR)\dodscr.exe    : $(OBJDIR)\dodscr.obj   $(LIBDIR)\toolsl.lib
+$(BINDIR)\dodsys.exe    : $(OBJDIR)\dodsys.obj
+$(BINDIR)\dram.exe      : $(OBJDIR)\dram.obj     $(LIBDIR)\toolsl.lib
+$(BINDIR)\driveok.exe   : $(OBJDIR)\driveok.obj
+$(BINDIR)\dump.exe      : $(OBJDIR)\dump.obj
+$(BINDIR)\ef.exe        : $(OBJDIR)\ef.obj       $(LIBDIR)\toolsl.lib
+$(BINDIR)\envsize.exe   : $(OBJDIR)\envsize.obj
+$(BINDIR)\equip.exe     : $(OBJDIR)\equip.obj
+$(BINDIR)\fillscr.exe   : $(OBJDIR)\fillscr.obj  $(LIBDIR)\toolsl.lib
+$(BINDIR)\findnul.exe   : $(OBJDIR)\findnul.obj
+$(BINDIR)\font.exe      : $(OBJDIR)\font.obj
+$(BINDIR)\fparser.exe   : $(OBJDIR)\fparser.obj
+$(BINDIR)\getch.exe     : $(OBJDIR)\getch.obj
+$(BINDIR)\hardtype.exe  : $(OBJDIR)\hardtype.obj
+$(BINDIR)\hexdec.exe    : $(OBJDIR)\hexdec.obj
+$(BINDIR)\int.exe       : $(OBJDIR)\int.obj
+$(BINDIR)\intwatch.exe  : $(OBJDIR)\intwatch.obj
+$(BINDIR)\isramdrv.exe  : $(OBJDIR)\isramdrv.obj
+$(BINDIR)\jensen.exe    : $(OBJDIR)\jensen.obj   $(LIBDIR)\toolsl.lib
+$(BINDIR)\jensen1.exe   : $(OBJDIR)\jensen1.obj  $(LIBDIR)\toolsl.lib
+$(BINDIR)\kbd.exe       : $(OBJDIR)\kbd.obj
+$(BINDIR)\kbdrate.exe   : $(OBJDIR)\kbdrate.obj
+$(BINDIR)\mice.exe      : $(OBJDIR)\mice.obj     $(LIBDIR)\toolsl.lib
+$(BINDIR)\mnu.exe       : $(OBJDIR)\mnu.obj      $(LIBDIR)\toolsl.lib
+   cl /Fe$@ $** /link /E /ST:10000
+$(BINDIR)\mnu1.exe      : $(OBJDIR)\mnu1.obj
+$(BINDIR)\mort.exe      : $(OBJDIR)\mort.obj     $(LIBDIR)\toolsl.lib
+$(BINDIR)\move.exe      : $(OBJDIR)\move.obj
+$(BINDIR)\movebox.exe   : $(OBJDIR)\movebox.obj
+$(BINDIR)\niceprn.exe   : $(OBJDIR)\niceprn.obj
+$(BINDIR)\num2word.exe  : $(OBJDIR)\num2word.obj
+$(BINDIR)\objdump.exe   : $(OBJDIR)\objdump.obj
+$(BINDIR)\once.exe      : $(OBJDIR)\once.obj
+$(BINDIR)\pages.exe     : $(OBJDIR)\pages.obj
+$(BINDIR)\patch61.exe   : $(OBJDIR)\patch61.obj
+$(BINDIR)\pic.exe       : $(OBJDIR)\pic.obj
+$(BINDIR)\ports.exe     : $(OBJDIR)\ports.obj
+$(BINDIR)\qcom.exe      : $(OBJDIR)\qcom.obj $(OBJDIR)\qcomutl.obj $(LIBDIR)\commsl.lib $(LIBDIR)\toolsl.lib
+   cl /Fe$@ $** /Fm /link /E /ST:10000 /NOE /CP:1
+$(BINDIR)\query.exe     : $(OBJDIR)\query.obj
+$(BINDIR)\rendir.exe    : $(OBJDIR)\rendir.obj
+$(BINDIR)\resetcom.exe  : $(OBJDIR)\resetcom.obj
+$(BINDIR)\return.exe    : $(OBJDIR)\return.obj
+$(BINDIR)\save.exe      : $(OBJDIR)\save.obj     $(LIBDIR)\toolsl.lib
+$(BINDIR)\showint.exe   : $(OBJDIR)\showint.obj
+$(BINDIR)\showkbd.exe   : $(OBJDIR)\showkbd.obj
+$(BINDIR)\sm.exe        : $(OBJDIR)\sm.obj       $(LIBDIR)\toolsl.lib
+$(BINDIR)\strange.exe   : $(OBJDIR)\strange.obj
+$(BINDIR)\tvm.exe       : $(OBJDIR)\tvm.obj      $(LIBDIR)\toolsl.lib
+$(BINDIR)\tvm1.exe      : $(OBJDIR)\tvm1.obj     $(LIBDIR)\toolsl.lib
+$(BINDIR)\tvm123.exe    : $(OBJDIR)\tvm123.obj   $(LIBDIR)\toolsl.lib
+$(BINDIR)\tvm2.exe      : $(OBJDIR)\tvm2.obj     $(LIBDIR)\toolsl.lib
+$(BINDIR)\tvm_try.exe   : $(OBJDIR)\tvm_try.obj  $(LIBDIR)\toolsl.lib
+$(BINDIR)\uparser.exe   : $(OBJDIR)\uparser.obj
+$(BINDIR)\vmode.exe     : $(OBJDIR)\vmode.obj
+$(BINDIR)\walk.exe      : $(OBJDIR)\walk.obj
+$(BINDIR)\xmas.exe      : $(OBJDIR)\xmas.obj
+   cl /Fe$@ $** /link /ST:10000
+$(BINDIR)\ziplist.exe   : $(OBJDIR)\ziplist.obj $(OBJDIR)\zip.obj
+
+#$(BINDIR)\pcx.exe       : $(OBJDIR)\pcx.obj meseg.lib
+#   cl /AM $** /link meseg.lib
+#$(BINDIR)\tree.exe      : $(OBJDIR)\tree.obj meseg.lib
+#   cl /AM $** /link meseg.lib
+
+!if 0
+#здддддддддддддддддддддддддддддддддддддддддддддддддд©
+#ЁPAS                                               Ё
+#юдддддддддддддддддддддддддддддддддддддддддддддддддды
+.pas.exe :
+   tpc $*.pas
+
+PAS : joy.pas
+      joylines.pas
+      joystick.pas
+      testdtr.pas
+   @echo $@ Done
+
+DRAM.EXE      : $*.pas
+SOFTDATE.EXE  : $*.pas
+
+!endif
+
+#################################################################

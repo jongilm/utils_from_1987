@@ -1,0 +1,225 @@
+________________________________________________________________________
+
+							TED 
+							Command
+
+	   TED was written by Tom Kihlken, and published in PC Magazine
+	   TEDPLUS was apparently also written by Tom Kihlken
+	   TED2 is basically TED with the character string search from TEDPLUS 
+	and additional modifications and enhancements by: 
+				James E. Galbraith
+				1201 Chase st.
+				Novato CA, 94945
+
+	   TED2.COM is the executable program file.
+	   TED2.ASM is the assembly language source code file.
+	   TEST.BAT is used to calculate the file integrity checksum byte.
+
+	   Even though TED2 is extensively reworked from the TED version that 
+	was published in PC-Magazine, the PC-Magazine copyright is still 
+	in effect (see "The Copyright Fight", PC Magazine February 24, 1987 
+	pp 61,62).  I believe that this is of concern if this program were 
+	to be included with or incorporated in a commercial product.  
+________________________________________________________________________
+
+Purpose:	TED, the tiny text editor, is a full-screen editor for 
+		line-oriented files of up to 64K in length.  It supports 
+		scrolling, cut, copy, paste, and printing operations.  
+		Character string search and search again were added to 
+		TEDPLUS and TED2 (TED version 2.0).  TED2 allows all 256 
+		characters of the IBM-PC extended ASCII set (including 
+		<Nul>, <CR>, and <LF>) to be entered.  
+
+Format:		TED [drive:][path]filespec
+
+Remarks:	TED will open and read a file whose name (and path, if 
+		required) is initially supplied on the command line.  If 
+		no filespec is provided, it will open a new file and then 
+		prompt for a filename when <F2> is pressed to save and exit.  
+		A legal DOS filename, and optionally a path name, must be 
+		provided to close the file.  If it is desired to not close 
+		the file and return to edit mode, press the <Esc> key.  
+		TED2 also allows pressing any non-character (function or 
+		cursor) key to return to edit mode.  The original of a 
+		modified file is saved with the extension .BAK.  
+		The QUIT command <Shift-F2>, when verified (with <y>, <Y>, 
+		or <CR>), abandons any modifications and leaves the original 
+		file intact.  If a file has been opened for editing and 
+		there have been no file changes, either the <F2> or the 
+		<Shift-F2> key will immediately abandon the edit copy of 
+		the file, without altering the original file, and return to 
+		DOS.  If the file has the Read-only attribute set, TED2 
+		will open the file to allow browsing, but will not allow any 
+		edit changes.  There is no "load" or "save" file function 
+		from within TED.  
+
+		TED uses certain DOS functions that require DOS version 2.0 
+		or higher to run.  TED2 has incorporated a DOS version test, 
+		and exits with a message if the test fails.  TED2 also 
+		incorporates a one-byte check sum test of program integrity, 
+		which gives a 99.7% confidence level that the program file 
+		has not been accidently corrupted.
+
+		Lines may be any length, and each must be terminated by 
+		pressing <Enter> (the end-of-line marker is <CR><LF>).  
+		Lines longer than the screen width display a diamond in the 
+		rightmost column.  Offscreen characters (up to 248 columns) 
+		may be viewed by using the Ctrl-arrow keys to move the 
+		window left or right.  Lines may be broken by pressing 
+		<Enter> at any point, in either Insert or Overstrike mode.  
+		Lines may be joined by pressing <Del> at the line end or 
+		<Backspace> at beginning.
+
+		One end of a "block" of text is defined by toggling the MARK 
+		<F4> command on, and moving the cursor with the cursor control 
+		keys to the other end of the block.  The marked area is shown 
+		in inverse video.  Pressing CUT <F5> removes it to a buffer 
+		from which it can be pasted <Shift-F5> at any point where the 
+		cursor is located.  The paste buffer remains intact until 
+		another section is marked and cut.  The paste buffer has room 
+		for 64K bytes.  If the MARK toggle is on, pressing PRINT <F3> 
+		prints the marked text (directly from the file buffer).  
+		Pressing <Shift-F3> will output a Form-feed character to 
+		position the printer to the top of the next page.
+
+		Pressing DEL_L <F9> or <Shift-F8> deletes the entire line 
+		and closes the gap.  Pressing DEL_EOL <F8> or <Alt-D> 
+		deletes from the cursor position to the end of the present 
+		line.  Pressing UDEL_L <F10> restores the most recent line 
+		deletion.  The line delete buffer remains intact until 
+		another line is deleted.  The line delete buffer has room 
+		for 255 characters.
+
+		The UNDO <F7> command restores up to 255 characters deleted 
+		by the <Del> key or over written while in the Overstrike mode.  
+		The UNDO buffer is cleared when the cursor is moved.  It 
+		will only restore the last key deleted with the <Backspace> 
+		key (the <Backspace> key is implemented as <Left-arrow><Del>). 
+
+		TEDPLUS added a string SEARCH and SEARCH AGAIN function.  
+		In TED2, <F6> or <Alt-S> is SEARCH, and <Shift-F6> or 
+		<Alt-A> is SEARCH AGAIN.  When the <F6> is pressed, the 
+		prompt "SEARCH> " appears on the bottom line.  Enter the 
+		desired text string and press the <ENTER> key.  If the 
+		string is found, it appears in inverse video on the screen.  
+		To search for the next occurance of the string, press 
+		<Shift-F6>.  The inverse video is extinguished when any 
+		key is pressed.  
+		NOTE: TEDPLUS and TED2 use a DOS function to enter the search 
+		string.  As a result, TED2 can enter characters that cannot 
+		be searched for.  These are <Nul>, <LF>, <CR>, and <Esc>.
+
+		Text is entered in insert mode by default.  Pressing the 
+		<Ins> key toggles between Insert and Overstrike mode.  The 
+		Insert/Overstrike state is displayed by an 'I' or 'O' in 
+		the lower right corner of the screen.  If the file has the 
+		Read-only attribute set, an 'R' is displayed in the lower 
+		right corner of the screen and no edit changes may be made 
+		to the file.
+
+		The ASCII Backspace (BS) code can 
+		be entered as <Ctrl-H>, the Cariage return (CR) code, as 
+		<Ctrl-M>, and the Line feed (LF) code, as <Ctrl-J>.  The 
+		<Enter> key enters a new-line (CR)(LF) marker, and the 
+		<Backspace> key deletes the character to the left of the 
+		cursor.  Any of the characters in the IBM extended ASCII 
+		set (except <Nul>, 00H) can be entered by pressing the Alt 
+		key, typing its ASCII decimal value on the numeric keypad, 
+		then releasing the Alt key.  TED2 allows entering the <Nul> 
+		code with <Shift-F1>.
+
+		TED2 does not use the CPM style End-of-file marker, <Ctrl-Z>, 
+		to indicate the last character in a text file.  If a Ctrl-Z 
+		character appears in the file, it is ignored.
+
+		TED configures itself to the display in use, and supports 
+		EGA and VGA text modes other than the standard 80 columns 
+		by 25 rows (eg. EGA 43 lines).  It does not alter screen 
+		attributes or colors.  Inverse video is used to indicate 
+		a MARKed block.  TED2 uses blinking inverse video to indicate 
+		that the search string has been found.  PgUp and PgDn scroll 
+		the file by the number of rows displayed, minus five.  It 
+		automatically handles "de-snow" on a CGA display.  Because 
+		TED makes BIOS calls and writes directly to the screen buffer, 
+		it could have problems with MS-DOS computers that are not 
+		sufficiently IBM-PC compatible.  
+
+		TED was written by Tom Kihlken and was published in PC 
+		Magazine in November 1988.  TEDPLUS appears to have also been 
+		written by Tom Kihlken in November 1988.  It was obtained 
+		from a Bulletin board service in June of 1989.  I entered 
+		TED from the magazine article listing when it was published.  
+		I found and fixed some minor bugs and added some enhancements.  
+		When I obtained TEDPLUS, I incorporated SEARCH and several 
+		other functions into my version of TED.  I also added a HELP 
+		screen.  TEDPLUS attempted to allow entering any key code 
+		into a file.  The ASCII <CR> and <LF> codes can now be 
+		directly entered as <Ctrl-M> and <Ctrl-J>.  If they are 
+		entered together, or ever become ajacent, they become an 
+		end-of-line marker.  The end-of-line marker may not ever be 
+		separated into <CR><LF> characters to keep TED2 from losing 
+		track of the cursor location.  The <Shft-F1> key is now used 
+		to enter the <Nul> character, making it possible to enter 
+		all of the 256 IBM extended ASCII set.  The screen update 
+		has been changed to look for any keys-waiting at the end of 
+		each line to improve the keyboard responsiveness.  This is 
+		especially noticable when scrolling the file up or down.  
+		To protect against a possible corrupted program file, there 
+		is a one-byte program check sum test which is run when the 
+		program is started.  The inverse of the check sum value is 
+		returned as a DOS ERRORLEVEL code (the reason it is limited 
+		to one byte).  If the check sum value is not zero, the 
+		program terminates with the message "TED altered".  
+		On top of everything else, TED2.COM is still a tiny program.  
+		It fits in 4096 bytes, four clusters on a 360K floppy disk.
+
+
+		Keypad Commands:
+
+		Up Arrow	Moves cursor up one row
+		Down Arrow	Moves cursor down one row
+		Left Arrow	Moves cursor left one column
+		Right Arrow	Moves cursor rigght one column
+		PgUp		Moves text window up one page
+		PgDn		Moves text window down one page
+		Home		Moves cursor to start of line (if already 
+				at start of line, moves up one line)
+		End		Moves cursor to end of line (if already at
+				end of line, moves to end of next line)
+		Ins		Toggles Insert/Overstrike mode (I/O)
+		Del		Deletes character under cursor (to right)
+		Backspace	Deletes character to left of cursor 
+		Ctrl-Home	Moves text window to top of file
+		Ctrl-End	Moves text window to bottom of file
+		Ctrl-PgUp	(same as <PgUp><PgDn>, moves text window up)
+		Ctrl-PgDn	(same as <PgDn><PgUp>, moves text window down)
+		Ctrl-Right Arrow Moves text window right eight columns
+		Ctrl-Left Arrow Moves text window left eight columns
+		Esc		Enters <Esc> char/Aborts <F2> command
+		Ctrl-C		Enters <Ctrl-C> char (DOS abort is disabled)
+		Enter		Start new line, adds <CR><LF> pair to file.
+
+
+		Editing Functions:
+
+		Help	F1	Help screen
+		<Nul>	Shft-F1 Adds <Nul> character (00H) to file
+		Exit	F2	Saves changes and exits
+		Quit	Shft-F2	Exits without saving changes
+		Print	F3	Prints the marked (by F4) text
+		FormFeed Shft-F3 Outputs a form feed to the printer.
+		Mark	F4	Toggles mark state on/off
+		Cut	F5	Moves marked (by F4) text to paste buffer
+		Paste	Shft-F5	Inserts contents of paste buffer at cursor
+		Search	F6	Search for a (case insensitive) string
+		Src/Nxt Shft-F6	Search again for same string
+		UnDo	F7	Replaces recently deleted characters
+		Del EOL	F8	Delete from cursor to the end of line
+		Del L	Shft-F8	Delete the current line (from Multi-Edit)
+		Del L	F9	Delete the current line 
+		Udel L	F10	Inserts the last deleted line
+
+		Search	Alt-S	Search
+		Src/Nxt Alt-A	Search again
+		Del EOL Alt-D	Delete to EOL
+

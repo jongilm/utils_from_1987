@@ -1,0 +1,2 @@
+stime.exe : stime.c
+   cl /W3 /AL /Oxs /Gs stime.c doddle.lib /link /CP:1 /E

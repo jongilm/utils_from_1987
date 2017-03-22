@@ -1,0 +1,21 @@
+a=1:c=3:d=4
+b=2
+e=a+b
+print e*d/c
+QUIT
+GOTO
+PRINT
+PRINTN
+HEX()
+"+-*/\^!@#$%'&?.;:"
+SIN(
+COS(
+TAN(
+ASN(
+ACS(
+ATN(
+LOG(
+INT(
+EXP(
+FAC(
+MOD(

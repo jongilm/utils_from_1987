@@ -1,0 +1,2 @@
+dups.exe : dups.c farptr.c
+   cl /AL /Zp dups.c farptr.c /link /ST:32000

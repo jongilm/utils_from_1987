@@ -1,0 +1,316 @@
+{std_util.inc    Miscelaneous global subprograms}
+
+{-----------------------------------------------------------------------------}
+procedure disp_io_error(device_name: file_id); {forward;}
+begin
+end;
+
+
+{-----------------------------------------------------------------------------}
+procedure disp_error_msg(err_msg: strng80); {forward;}
+begin
+end;
+
+
+{-----------------------------------------------------------------------------}
+procedure beep;
+   begin
+   sound(440);
+   delay(250);
+   nosound;
+   end; {beep}
+   
+
+{-----------------------------------------------------------------------------}
+procedure repeat_char(character : char;  count : integer);
+   var i        : integer;
+   
+   begin
+   io_status := zero;
+   i := zero;
+{$i-}
+   while (io_status = zero) and (i < count) do
+      begin
+      write(character);
+      io_status := ioresult;
+      i := succ(i);
+      end;
+{$i+}
+   if (io_status <> zero) then
+      disp_io_error(output_id);
+   end; {repeat_char}         
+
+{-----------------------------------------------------------------------------}
+procedure strip_trailing_char(var inp_str       : strng255;
+                                  len           : byte;
+                                  strip         : char);
+
+   begin
+   inp_str[0] := chr(0);
+   while (inp_str[len] = strip) and (len > 0) do
+      len := pred(len);
+   inp_str[0] := chr(len);
+   end; { strip_trailing_char }
+
+
+{-----------------------------------------------------------------------------}
+procedure strip_leading_char(var inp_str       : strng255;
+                                 len           : byte;
+                                 strip         : char);
+
+   var
+      i         : byte;
+      
+   begin
+   i := 1;
+   while (inp_str[i] = strip) and (i <= len) do
+      i := succ(i);
+   inp_str := copy(inp_str,i,len);
+   end; { strip_leading_char }
+
+{-----------------------------------------------------------------------------}
+function stripped(var inp_str       : strng255;
+                      len           : byte;
+                      strip         : char)             : strng255;
+      
+   begin
+   strip_trailing_char(inp_str,len,strip);
+   strip_leading_char(inp_str,len,strip);
+   stripped := inp_str;
+   end; { stripped }
+
+{-----------------------------------------------------------------------------}
+function exist(file_name: file_id): boolean;
+   var
+      chk_file         : file;
+   
+   begin
+   assign(chk_file,file_name);
+{$i-}
+   reset(chk_file);
+{$i+}
+   if (ioresult = zero) then
+      begin
+      exist := true;
+      close(chk_file);
+      end
+   else
+      exist := false;
+   end; {exist}
+(*
+{-----------------------------------------------------------------------------}
+procedure SETCOLOR(FGROUND,BGROUND:INTEGER);
+begin
+  TEXTCOLOR(FGROUND+BLINKVAL);
+  TEXTBACKGROUND(BGROUND);
+end; { procedure SETCOLOR }
+
+{-----------------------------------------------------------------------------}
+PROCEDURE HIGHON;
+  BEGIN
+    COLORVAR:=WHITE;
+    BACKVAR:=BLACK;
+    SETCOLOR(COLORVAR,BACKVAR);
+  END;
+
+{-----------------------------------------------------------------------------}
+PROCEDURE HIGHOFF;
+  BEGIN
+    COLORVAR:=LIGHTGRAY;
+    BACKVAR:=BLACK;
+    SETCOLOR(COLORVAR,BACKVAR);
+  END;
+
+{-----------------------------------------------------------------------------}
+PROCEDURE BLINKON;
+  BEGIN
+    BLINKVAL:=BLINK;
+    SETCOLOR(COLORVAR,BACKVAR);
+  END;
+
+{-----------------------------------------------------------------------------}
+PROCEDURE BLINKOFF;
+  BEGIN
+    BLINKVAL:=0;
+    SETCOLOR(COLORVAR,BACKVAR);
+  END;
+
+{-----------------------------------------------------------------------------}
+PROCEDURE REVDON;
+VAR  TEMPCOLOR  :  INTEGER;
+  BEGIN
+    TEMPCOLOR:=COLORVAR;
+    COLORVAR:=BACKVAR;
+    BACKVAR:=TEMPCOLOR;
+    SETCOLOR(COLORVAR,BACKVAR);
+  END;
+
+{-----------------------------------------------------------------------------}
+PROCEDURE REVOFF;
+VAR  TEMPCOLOR  :  INTEGER;
+  BEGIN
+    TEMPCOLOR:=COLORVAR;
+    COLORVAR:=BACKVAR;
+    BACKVAR:=TEMPCOLOR;
+    SETCOLOR(COLORVAR,BACKVAR);
+  END;
+
+{-----------------------------------------------------------------------------}
+PROCEDURE PROMPT(X,Y:INTEGER;PROMPTSTR:STRNG80);
+  BEGIN
+    GOTOXY(X,Y);
+    WRITE(PROMPTSTR);
+  END;
+
+{-----------------------------------------------------------------------------}
+PROCEDURE TITLE(Y:INTEGER;PROMPTSTR:STRNG80);
+  BEGIN
+    HIGHON;
+    PROMPT(40-TRUNC(LENGTH(PROMPTSTR)/2),Y,PROMPTSTR);
+    HIGHOFF;
+  END;
+*)
+{-----------------------------------------------------------------------------}
+FUNCTION STRNGFUN(A:CHAR;L:INTEGER):STRNG80;
+VAR ZTEMP  :  STRNG80;
+    ZI     :  INTEGER;
+  BEGIN
+    ZTEMP:='';
+    IF L>80 THEN L:=80;
+    FOR ZI:=1 TO L DO
+      ZTEMP:=ZTEMP+A;
+    STRNGFUN:=ZTEMP;
+  END;
+
+{-----------------------------------------------------------------------------}
+procedure PRTSTRNG(A:CHAR;L:INTEGER);
+begin
+  WRITE(LST,STRNGFUN(A,L));
+end; { procedure PRTSTRNG(A:CHAR;L:INTEGER); }
+
+{-----------------------------------------------------------------------------}
+procedure DISPSTRNG(A:CHAR;L:INTEGER);
+ begin
+   WRITE(STRNGFUN(A,L));
+ end; { procedure DISPSTRNG(A:CHAR;L:INTEGER) }
+
+{-----------------------------------------------------------------------------}
+PROCEDURE BLKLN(X,Y,L:INTEGER);
+   BEGIN
+     GOTOXY(X,Y);
+     WRITE('':L);
+   END;
+
+{-----------------------------------------------------------------------------}
+PROCEDURE PRTSPC(L:INTEGER);
+    BEGIN
+      WRITE(LST,'':L);
+    END;
+(*
+{-----------------------------------------------------------------------------}
+PROCEDURE DISKERR;
+  BEGIN
+    BLKLN(1,24,79);
+    TITLE(24,'A DISK ERROR HAS OCCURED PLEASE CONTACT YOUR SUPPLIER IMMEDIATLY');
+    REPEAT UNTIL KEYPRESSED;
+  END;
+*)
+{-----------------------------------------------------------------------------}
+PROCEDURE BOX(X,Y,L,H:INTEGER);
+VAR  ZI   :  INTEGER;
+  BEGIN
+    GOTOXY(X,Y);
+    WRITE(CHR(218));
+    DISPSTRNG(CHR(196),L-2);
+    WRITE(CHR(191));
+    FOR ZI:=1 TO H-2 DO
+      BEGIN
+        GOTOXY(X+L-1,Y+ZI);
+        WRITE(CHR(179));
+      END;
+    FOR ZI:=1 TO H-2 DO
+      BEGIN
+        GOTOXY(X,Y+ZI);
+        WRITE(CHR(179));
+      END;
+    GOTOXY(X,Y+H-1);
+    WRITE(CHR(192));
+    DISPSTRNG(CHR(196),L-2);
+    WRITE(CHR(217));
+  END;
+(*
+{-----------------------------------------------------------------------------}
+procedure validate_date(var report_date : strng8; xpos, ypos : integer);
+
+var
+  day,
+  month,
+  year,
+  leap                  : integer;
+  valid                 : boolean;
+
+begin
+  {validate / see if the start => first /see if the end <= last}
+  val(copy(report_date,1,2),day,error);
+  val(copy(report_date,3,2),month,error);
+  val(copy(report_date,5,2),year,error);
+  report_date := copy(report_date,5,2) + copy(report_date,3,2)
+                 + copy(report_date,1,2);
+  if year > 80 then
+    report_date := '19' + report_date
+  else
+    report_date := '20' + report_date;
+  case month of
+    1,
+    3,
+    5,
+    7,
+    8,
+    10,
+    12 : valid := (day >= 1) and (day <= 31);
+
+    4,
+    6,
+    9,
+    11 : valid := (day >= 1) and (day <= 30);
+
+    2  : begin
+           leap := year mod 4;
+           if leap = 0 then
+             valid := (day >= 1) and (day <= 29)
+           else
+             valid := (day >= 1) and (day <= 28);
+         end;
+  end;
+  if not valid then
+    begin
+      gotoxy(5,24);
+      write(con,'This Date is Invalid - Press Any  Key to Continue  ');
+      repeat
+      until keypressed;
+      gotoxy(xpos,ypos);
+      write(con,'DDMMYY');
+      gotoxy(5,24);
+      write(con,'ENTER FROM DATE (DDMMYY)                           ');
+      report_date := read_str(xpos,ypos,6);
+      if not complete then
+        validate_date(report_date,xpos,ypos);
+    end;
+end;
+
+{-----------------------------------------------------------------------------}
+function spaces(lth : integer; buffer_ch : char) : strng131;
+
+var
+  desc                  : strng131;
+  i                     : integer;
+
+begin
+  desc := '';
+  for i := 1 to lth do
+    desc := desc + buffer_ch;
+  spaces := desc;
+end;
+*)
+{-----------------------------------------------------------------------------}
+

@@ -1,0 +1,127 @@
+htol..............htol              itoh..............itoh
+_beep.............beep              _box..............scr
+_btrieve_err......btrv              _btrv.............btrv
+_bytebit..........des               _b_err............btrv
+_close_file.......btrv              _clrbol...........scr
+_clrbos...........scr               _clreol...........scr
+_clreos...........scr               _clrl.............scr
+_clrscr...........scr               _clrwin...........scr
+_decryptfile......des_file          _dedes............des
+_delay............delay             _delay_reference..delay
+_desinit..........des               _dir_scan.........dir_scan
+_DisplayFields....field             _EditField........field
+_EditFieldAlpha...field             _EditFieldHex.....field
+_EditFieldNumeric..field            _edline...........scr_edln
+_encryptfile......des_file          _endes............des
+_file_size........filesize          _fp...............des
+_getcursorshape...scr               _getcursorsize....scr
+_GetDiskFreeSpace..scr              _getvcols.........scr
+_getvdev..........scr               _getvgamono.......scr
+_getvmode.........scr               _getvpage.........scr
+_getvseg..........scr               _getvsnow.........scr
+_get_new_colour...colour            _gotoxy...........scr
+_ip...............des               _load_btrv........btrv
+_MenuDeleteItem...menu              _MenuDeleteSubMenu..menu
+_MenuNextItem.....menu              _MenuProcess......menu
+_MenuRelocateItem..menu             _MenuSetItem......menu
+_MenuSetItemDefault..menu           _MenuSetParamsDefault..menu
+_nibblebit........des               _open_file........btrv
+_p32i.............des               _pc1..............des
+_pc2..............des               _Pic..............field
+_pip..............beep              _popscreen........scr
+_popwindow........scr               _popwindow_noalloc..scr
+_PressAnyKey......scr               _pushscreen.......scr
+_pushwindow.......scr               _pushwindow_noalloc..scr
+_ReadField........scr               _scan.............dir_scan
+_scroll...........scr               _setborder........scr
+_setcursorshape...scr               _setcursorsize....scr
+_SetFieldInfo.....field             _setvgablink......scr
+_setvmode.........scr               _setvpage.........scr
+_shadow...........scr               _si...............des
+_totrot...........des               _tvm_fv...........tvm
+_tvm_i............tvm               _tvm_n............tvm
+_tvm_pmt..........tvm               _tvm_pv...........tvm
+_unload_btrv......btrv              _wherex...........scr
+_wherey...........scr               _windowstorage....scr
+_window_dn........scr               _window_dn_noalloc..scr
+_window_up........scr               _window_up_noalloc..scr
+__get_attr........scr_io            __get_attrs.......scr_io
+__get_char........scr_io            __get_chars.......scr_io
+__get_video.......scr_io            __put_attr........scr_io
+__put_attrs.......scr_io            __put_attrs_xp....scr_io
+__put_char........scr_io            __put_chars.......scr_io
+__put_chars_xp....scr_io            __put_field.......scr_io
+__put_string......scr_io            __put_text........scr_io
+__put_video.......scr_io            __scr_cols........scr_io
+__scr_seg.........scr_io            __scr_snow........scr_io
+
+
+scr_io            Offset: 00000010H  Code and data size: 787H
+  __get_attr        __get_attrs       __get_char        __get_chars
+  __get_video       __put_attr        __put_attrs       __put_attrs_xp
+  __put_char        __put_chars       __put_chars_xp    __put_field
+  __put_string      __put_text        __put_video       __scr_cols
+  __scr_seg         __scr_snow      
+
+htol              Offset: 00000cf0H  Code and data size: 35H
+  htol            
+
+itoh              Offset: 00000d80H  Code and data size: 23H
+  itoh            
+
+beep              Offset: 00000e00H  Code and data size: 66H
+  _beep             _pip            
+
+colour            Offset: 00000f80H  Code and data size: 251H
+  _get_new_colour 
+
+delay             Offset: 00001370H  Code and data size: 11eH
+  _delay            _delay_reference
+
+des               Offset: 000015e0H  Code and data size: 6c4fH
+  _bytebit          _dedes            _desinit          _endes
+  _fp               _ip               _nibblebit        _p32i
+  _pc1              _pc2              _si               _totrot
+
+des_file          Offset: 00002550H  Code and data size: 316H
+  _decryptfile      _encryptfile    
+
+dir_scan          Offset: 00002aa0H  Code and data size: e1H
+  _dir_scan         _scan           
+
+field             Offset: 00002d10H  Code and data size: 4efH
+  _DisplayFields    _EditField        _EditFieldAlpha   _EditFieldHex
+  _EditFieldNumeric                   _Pic              _SetFieldInfo
+
+filesize          Offset: 000034b0H  Code and data size: 3aH
+  _file_size      
+
+menu              Offset: 00003620H  Code and data size: c8fH
+  _MenuDeleteItem   _MenuDeleteSubMenu                  _MenuNextItem
+  _MenuProcess      _MenuRelocateItem                   _MenuSetItem
+  _MenuSetItemDefault                 _MenuSetParamsDefault
+
+scr               Offset: 00004750H  Code and data size: ccaH
+  _box              _clrbol           _clrbos           _clreol
+  _clreos           _clrl             _clrscr           _clrwin
+  _getcursorshape   _getcursorsize    _GetDiskFreeSpace
+  _getvcols         _getvdev          _getvgamono       _getvmode
+  _getvpage         _getvseg          _getvsnow         _gotoxy
+  _popscreen        _popwindow        _popwindow_noalloc
+  _PressAnyKey      _pushscreen       _pushwindow       _pushwindow_noalloc
+  _ReadField        _scroll           _setborder        _setcursorshape
+  _setcursorsize    _setvgablink      _setvmode         _setvpage
+  _shadow           _wherex           _wherey           _windowstorage
+  _window_dn        _window_dn_noalloc                  _window_up
+  _window_up_noalloc                
+
+scr_edln          Offset: 00005ba0H  Code and data size: 3f2H
+  _edline         
+
+tvm               Offset: 00006390H  Code and data size: 2d6H
+  _tvm_fv           _tvm_i            _tvm_n            _tvm_pmt
+  _tvm_pv         
+
+btrv              Offset: 00006b20H  Code and data size: ba3H
+  _btrieve_err      _btrv             _b_err            _close_file
+  _load_btrv        _open_file        _unload_btrv    

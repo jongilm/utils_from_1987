@@ -1,0 +1,119 @@
+const
+
+   zero                 = 0;
+   fill_char            = '_';
+   space                = ' ';
+   null                 = '';
+
+   nul                  = #0;
+   bell                 = #7;
+   bs                   = #8;
+   tab                  = #9;
+   lf                   = #10;
+   cr                   = #13;
+   ff                   = #12;
+   esc                  = #27;
+   del                  = #127;
+
+   max_row              = 24;
+   max_col              = 80;
+   msg_line             = 22;
+   prompt_line          = 23;
+   cmd_line             = 24;
+
+   backsp               = bs;
+   bs_key               = #32#17#196#196#32;
+   enter                = cr;
+   enter_key            = #32#17#196#217#32;
+   clear                = tab;
+   clear_key            = #32#196#196#16#221#32;
+   quit                 = esc;
+   quit_key             = ' <Esc> ';
+   prev                 = #72;
+   prev_key             = #32#24#32;
+   help                 = #59;
+   help_key             = ' F1 ';
+   lead_in              = esc;
+
+   max_fld              = 32;
+   text_fld             = 'T';
+   uc_text              = 'U';
+   numeric              = 'N';
+
+   required             = 'R';
+   protected            = 'P';
+   manual               = 'M';
+   automatic            = 'A';
+
+   incr                 = 1;
+   decr                 = -1;
+
+type
+
+   strng2               = string[2];
+   strng3               = string[3];
+   strng4               = string[4];
+   strng6               = string[6];
+   strng7               = string[7];
+   strng8               = string[8];
+   strng10              = string[10];
+   strng11              = string[11];
+   strng13              = string[13];
+   strng20              = string[20];
+   strng30              = string[30];
+   strng40              = string[40];
+   strng50              = string[50];
+   strng60              = string[60];
+   strng79              = string[79];
+   strng80              = string[80];
+   strng131             = string[131];
+   strng255             = string[255];
+
+   file_id              = string[64];
+   drive_id             = string[2];
+
+   any_char             = set of char;
+   printable_char       = set of ' '..'~';
+   special_char         = set of #128..#255;
+   control_char         = set of #0..#127;
+
+   fld_parms            = record
+                        xloc            : integer;
+                        yloc            : integer;
+                        fld_len         : integer;
+                        fld_type        : char;
+                        exit_type       : char;
+                        fld_msg         : strng60;
+                        end;
+
+   scrn                 = array[1..max_row] of strng80;
+   inp_parms            = array[1..max_fld] of fld_parms;
+
+   help_pointer         = ^help_text;
+   help_text            = record
+                        help_text       : strng80;
+                        next_line       : help_pointer;
+                        end;
+
+var
+
+   default,
+   inp_str              : strng255;
+   i,
+   j,
+   k,
+   io_status            : integer;
+   inctl,
+   inchr                : char;
+   output_id            : file_id;
+   esc_flag,
+   err_flag,
+   help_flag,
+   quit_flag,
+   end_session          : boolean;
+
+   fld_cnt,
+   direction            : integer;
+   top_of_heap          : ^integer;
+   first_help           : help_pointer;
+

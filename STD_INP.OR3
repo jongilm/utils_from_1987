@@ -1,0 +1,280 @@
+
+{std_inp.inc    Standard input subprogram}
+
+{-----------------------------------------------------------------------------}
+procedure read_kbd(var inchr,inctl: char);
+   begin
+   inctl := nul;
+   read(kbd,inchr);
+   if (keypressed and (inchr = lead_in)) then
+      begin
+      delay(0);
+      read(kbd,inctl);
+      end
+   else
+      if (inchr in [#1..#31,del]) then
+         inctl := inchr;
+   end; {read_kbd}
+   
+{-----------------------------------------------------------------------------}
+function valid_key(valid_keys: any_char): char;
+   var
+      inchr,
+      inctl             : char;
+
+   begin   
+   repeat
+      read_kbd(inchr,inctl);
+      if (inctl = nul) then
+         begin
+         inchr := upcase(inchr);
+         write(inchr,bs);
+         end
+      else
+         inchr := inctl;
+      if (not (inchr in valid_keys)) then
+         beep;
+   until (inchr in valid_keys);
+   valid_key := inchr;
+   end; {valid_key}
+   
+{-----------------------------------------------------------------------------}
+procedure init_field(init_char : char;
+                     var parms : fld_parms);
+   var 
+      i         : byte;
+      
+   begin
+   with parms do
+      begin
+      gotoxy(xloc,yloc);
+      repeat_char(init_char,fld_len);
+      gotoxy(xloc,yloc);
+      end;
+   end; {init_field}
+
+{-----------------------------------------------------------------------------}
+procedure get_field_input(var parms     : fld_parms;
+                          var chr_set   : printable_char;
+                          var ctrl_set  : control_char);
+   var 
+      count     : integer;
+      exit      : boolean;
+      
+{ general purpose keyboard input routine.
+
+  Parameters are :
+        parms           Input field parameters for the field to be processed.
+        chr_set         Set of characters acceptable for input. Beep for others
+        ctrl_set        Set of control function characters acceptable for input
+
+  Global variables used:
+        esc_flag        boolean         Global exit flag
+        inp_str         strng255        Input buffer string.
+                                        NB length(inp_str) is 
+                                        set to count on exit.
+        direction       integer         Incr/decr indicator. 
+                                        Switched to decr if valid control
+                                        character is prev.
+        inchr           char            Used to store input character.
+        inctl           char            Used to store input control/function
+                                        code.
+}
+   procedure process_control_character;
+      var
+         i         : byte;
+
+      procedure backspace(fill : char);
+         begin
+         if (count > zero) then
+            begin
+            write(bs,fill,bs);
+            count := pred(count);
+            end
+         else
+            beep;
+         end; {backspace}
+   
+
+      procedure clear_field;
+         var
+            i         : byte;
+         
+         begin
+         init_field(fill_char,parms);
+         with parms do
+            fillchar(inp_str,fld_len + 1,zero);
+         count := zero;
+         end; {clear_field}
+      
+      begin {process_control_character}
+         case inctl of
+            backsp    : backspace(fill_char);
+            enter     : exit := true;
+            quit      : begin
+                        esc_flag := true;
+                        exit := true;
+                        end;
+            prev      : begin
+                        clear_field;
+                        direction := decr;
+                        exit := true;
+                        end;
+            clear     : begin
+                        clear_field;
+                        exit := true;
+                        end;
+            help      : begin
+                        help_flag := true;
+                        exit := true;
+                        end;
+            else        beep;
+         end; {case}
+      end; {process_control_character}
+
+   procedure accept_valid_character;
+      begin
+      with parms do
+         begin
+         if (fld_type = uc_text) then
+            inchr := upcase(inchr);
+         if (inchr in chr_set) and (count < fld_len) then
+            begin
+            write(inchr);
+            count := succ(count);
+            inp_str[count] := inchr;
+            if (exit_type = automatic) and (count = fld_len) then
+               begin
+               exit := true;
+               inctl := cr;
+               end; {if}
+            end {if}
+         else
+            beep;
+         end; {with}
+      end; {accept_valid_character}
+            
+   begin { get_field_input }
+   count := zero;
+   esc_flag := false;
+   exit := false;
+   direction := incr;
+   repeat
+      read_kbd(inchr,inctl);
+      if (inctl in ctrl_set) then
+         process_control_character
+      else
+         accept_valid_character;
+   until exit;
+   inp_str[0] := chr(count);
+   repeat_char(space,(parms.fld_len - count));
+   end; {get_field_input}
+   
+{-----------------------------------------------------------------------------}
+function valid_real(var parms   : fld_parms;
+                        point   : byte;
+                        min,
+                        max     : real)         : real;
+
+   const
+      chr_set   : printable_char = ['0'..'9','-','.'];
+      ctrl_set  : control_char   = [cr,bs,clear,prev,quit];
+      
+   var
+      real_val  : real;
+      min_str,
+      max_str   : strng20;
+      err_msg   : strng80;
+
+   begin { valid_real }
+   val(stripped(default,length(default),space),real_val,io_status);
+   if io_status <> zero then
+      real_val := 0.0;
+   valid_real := real_val;
+   get_field_input(parms,chr_set,ctrl_set);
+   if ((inctl = cr) and (length(inp_str) > zero)) or (inctl = clear) then
+      begin
+      if (inctl = clear) then
+         inp_str := '0.00';
+      val(inp_str,real_val,io_status);
+      if (io_status = zero) and ((real_val >= min) and (real_val <= max)) then
+         valid_real := real_val
+      else
+         begin
+         str(min:parms.fld_len:point,min_str);
+         str(max:parms.fld_len:point,max_str);
+         err_msg := 'Value must be from ' + min_str + ' through ' + max_str;
+         disp_error_msg(err_msg);
+         direction := zero;
+         end;
+      end;
+   end; {valid_real}
+   
+{-----------------------------------------------------------------------------}
+function valid_str(var parms: fld_parms)        : strng80;
+   const
+      chr_set   : printable_char = [' '..'~'];
+      ctrl_set  : control_char   = [cr,bs,clear,prev,quit];
+      
+   begin {valid_str}
+   valid_str := default;
+   get_field_input(parms,chr_set,ctrl_set);
+   if ((inctl = cr) and (length(inp_str) > zero)) or (inctl = clear) then
+   valid_str := inp_str;
+   end; { valid_str }
+   
+{-----------------------------------------------------------------------------}
+function valid_int(var parms : fld_parms;
+                       min,
+                       max   : integer)         : integer;
+
+   const
+      chr_set   : printable_char = ['0'..'9','-'];
+      ctrl_set  : control_char   = [cr,bs,clear,prev,quit];
+      
+   var
+      int_val   : integer;
+      min_str,
+      max_str   : strng20;
+      err_msg   : strng80;
+
+   begin { valid_int }
+   val(stripped(default,length(default),space),int_val,io_status);
+   if io_status <> zero then
+      int_val := zero;
+   valid_int := int_val;
+   get_field_input(parms,chr_set,ctrl_set);
+   if ((inctl = cr) and (length(inp_str) > zero)) or (inctl = clear) then
+      begin
+      if (inctl = clear) then
+         inp_str := '0';
+      val(inp_str,int_val,io_status);
+      if (io_status = zero) and ((int_val >= min) and (int_val <= max)) then
+         valid_int := int_val
+      else
+         begin
+         str(min:parms.fld_len,min_str);
+         str(max:parms.fld_len,max_str);
+         err_msg := 'Value must be from ' + min_str + ' through ' + max_str;
+         disp_error_msg(err_msg);
+         direction := zero;
+         end;
+      end;
+   end; {valid_int}
+   
+{-----------------------------------------------------------------------------}
+function valid_chr(var parms     : fld_parms;
+                       valid_set : printable_char)        : char;
+   const
+      ctrl_set  : control_char   = [cr,bs,clear,prev,quit];
+      
+   begin {valid_chr}
+   valid_chr := default[1];
+   get_field_input(parms,valid_set,ctrl_set);
+   if ((inctl = cr) and (length(inp_str) > zero)) or (inctl = clear) then
+      valid_chr := inp_str[1];
+   end; { valid_chr }
+   
+{-----------------------------------------------------------------------------}
+{ END }
+

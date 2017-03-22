@@ -1,0 +1,97 @@
+LF       EQU    0Ah
+CR       EQU    0Dh
+
+SetVideoMode MACRO Mode
+        MOV     AH,0
+        MOV     AL,Mode
+        INT     10h
+ENDM
+
+SetCursorSize MACRO Top,Bottom
+        MOV     AH,1
+        MOV     CH,Top
+        MOV     CL,Bottom
+        INT     10h
+ENDM
+
+GotoXY MACRO X,Y
+        MOV     AH,2
+        MOV     BH,0
+        MOV     DH,Y
+        MOV     DL,X
+        INT     10h
+ENDM
+
+WhereX MACRO
+        MOV     AH,3
+        MOV     BH,0
+        INT     10h
+        XOR     AL,AL
+        MOV     AH,DL
+ENDM
+
+WhereY MACRO
+        MOV     AH,3
+        MOV     BH,0
+        INT     10h
+        XOR     AL,AL
+        MOV     AH,DH
+ENDM
+
+KeyIn MACRO
+        MOV     AH,0
+        INT     16h  ; AL=ASCII code, AH=Scan code
+ENDM
+
+ClrWin MACRO X1,Y1,X2,Y2,Colour
+        mov     ax,Colour
+        push    ax
+        mov     ax,Y2
+        push    ax
+        mov     ax,X2
+        push    ax
+        mov     ax,Y1
+        push    ax
+        mov     ax,X1
+        push    ax
+        call    _ClrWin
+        add     sp,10
+ENDM
+
+ClrScrCol MACRO Colour
+        ClrWin 0,0,79d,24d,Colour
+ENDM
+
+ClrScr MACRO
+        ClrWin 0,0,79d,24d,07h
+ENDM
+
+OutChar MACRO X,Y,Char,Qty
+        mov     ax,Qty
+        push    ax
+        mov     ax,Char
+        push    ax
+        mov     ax,Y
+        push    ax
+        mov     ax,X
+        push    ax
+        call    _OutChar
+        add     sp,8
+ENDM
+
+Window MACRO X1,Y1,X2,Y2,Colour,Shadow
+        mov ax,Shadow
+        push ax
+        mov ax,Colour
+        push ax
+        mov ax,Y2
+        push ax
+        mov ax,X2
+        push ax
+        mov ax,Y1
+        push ax
+        mov ax,X1
+        push ax
+        call _Window
+        add     sp,12
+ENDM

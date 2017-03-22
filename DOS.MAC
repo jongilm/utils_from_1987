@@ -1,0 +1,11 @@
+Exit    MACRO ExitCode
+        MOV     AH,4Ch
+        MOV     AL,ExitCode
+        INT     21h
+ENDM
+
+Print   MACRO String
+        MOV     AH,9
+        MOV     DX,offset String
+        INT     21h
+ENDM
